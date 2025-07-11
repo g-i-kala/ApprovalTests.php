@@ -4,12 +4,13 @@ namespace ApprovalTests;
 
 use ApprovalTests\Reporters\Reporter;
 
-class SkipCombinationException extends \Exception {
+class SkipCombinationException extends \Exception
+{
 }
 
 class CombinationApprovals
 {
-    static $empty = ["CombinationApprovalsEmpty"];
+    public static $empty = ["CombinationApprovalsEmpty"];
 
     public static function verifyAllCombinations1($param, array $values, Reporter $reporter = null)
     {
@@ -86,6 +87,6 @@ class CombinationApprovals
 
     public static function displayArguments(...$args): string
     {
-        return '[' . implode(', ', array_filter($args, function($i) { return $i !== self::$empty[0]; })) . "] => ";
+        return '[' . implode(', ', array_filter($args, function ($i) { return $i !== self::$empty[0]; })) . "] => ";
     }
 }
