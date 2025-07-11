@@ -93,3 +93,8 @@ Temporary Items
 
 # End of https://www.gitignore.io/api/windows,vim,composer,linux,osx
 *.cache
+
+# Test coverage folder removed
+
+.phpunit.cache
+/test-reports/
