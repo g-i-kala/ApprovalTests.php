@@ -1,4 +1,6 @@
-<?php namespace ApprovalTests\Tests;
+<?php
+
+namespace ApprovalTests\Tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -6,7 +8,13 @@ class ErrorHandlerTest extends TestCase
 {
     public function testEWarning()
     {
+        set_error_handler(function ($severity, $message, $file, $line) {
+            throw new \ErrorException($message, 0, $severity, $file, $line);
+        });
+
         $this->expectException(\ErrorException::class);
         trigger_error('Demo warning', E_USER_WARNING);
+
+        restore_error_handler();
     }
 }
