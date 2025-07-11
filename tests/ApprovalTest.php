@@ -1,4 +1,6 @@
-<?php namespace ApprovalTests\Tests;
+<?php
+
+namespace ApprovalTests\Tests;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
