@@ -1,0 +1,3 @@
+apple -> APPLE
+banana -> BANANA
+cherry -> CHERRY

@@ -58,4 +58,24 @@ class ApprovalTest extends TestCase
         Approvals::verifyAsJson($obj);
     }
     # end-snippet
+
+    public function testVerifyTransformedList()
+    {
+        $list = [
+          'apple', 'banana', 'cherry'
+        ];
+
+        $callbackObject = new UpperClassHelper();
+
+        Approvals::verifyTransformedList($list, $callbackObject, 'toUpper');
+    }
+
+}
+
+class UpperClassHelper
+{
+    public function toUpper(string $input)
+    {
+        return strtoupper($input);
+    }
 }
