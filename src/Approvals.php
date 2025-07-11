@@ -1,4 +1,6 @@
-<?php namespace ApprovalTests;
+<?php
+
+namespace ApprovalTests;
 
 use ApprovalTests\Reporters\DiffReporter;
 use ApprovalTests\Writers\Writer;
@@ -10,12 +12,12 @@ use PHPUnit\Framework\Assert;
 
 class Approvals
 {
-    public static function verifyString($received, Reporter $reporter = null)
+    public static function verifyString($received, ?Reporter $reporter = null)
     {
         self::verifyStringWithFileExtension($received, 'txt', $reporter);
     }
 
-    public static function verifyStringWithFileExtension($received, $extensionWithoutDot, Reporter $reporter = null)
+    public static function verifyStringWithFileExtension($received, $extensionWithoutDot, ?Reporter $reporter = null)
     {
         self::verify(new TextWriter($received, $extensionWithoutDot), new PHPUnitNamer(), $reporter);
     }
@@ -28,7 +30,7 @@ class Approvals
     /**
      * Perform the approval test by comparing the contents of one file to another
      */
-    public static function verify(Writer $writer, Namer $namer, Reporter $reporter = null)
+    public static function verify(Writer $writer, Namer $namer, ?Reporter $reporter = null)
     {
         self::satisfyPHPUnitRequirementForAssert();
         if ($reporter == null) {
@@ -38,21 +40,22 @@ class Approvals
         $extension = $writer->getExtensionWithoutDot();
         $approvedFilename = $namer->getApprovedFile($extension);
         if (!file_exists($approvedFilename)) {
-          $writer->writeEmpty(
-            $namer->getApprovedFile($extension),
-            $namer->getApprovalsDirectory());
+            $writer->writeEmpty(
+                $namer->getApprovedFile($extension),
+                $namer->getApprovalsDirectory()
+            );
         }
 
         $receivedFilename = $writer->write(
-          $namer->getReceivedFile($extension),
-          $namer->getApprovalsDirectory());
+            $namer->getReceivedFile($extension),
+            $namer->getApprovalsDirectory()
+        );
 
         $matching = FileApprover::checkFiles($approvedFilename, $receivedFilename);
 
         if ($matching) {
             $writer->delete($receivedFilename);
-        }
-        else {
+        } else {
             $reporter->report($approvedFilename, $receivedFilename);
             throw new ApprovalMismatchException($approvedFilename, $receivedFilename);
         }
