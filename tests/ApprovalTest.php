@@ -3,9 +3,12 @@
 namespace ApprovalTests\Tests;
 
 use Exception;
-use PHPUnit\Framework\TestCase;
 use ApprovalTests\Approvals;
+use ApprovalTests\Namers\Namer;
+use PHPUnit\Framework\TestCase;
+use ApprovalTests\Writers\Writer;
 use ApprovalTests\Reporters\QuietReporter;
+use PHPUnit\Framework\MockObject\Generator\MockClass;
 
 # begin-snippet: array_example
 class ApprovalTest extends TestCase
@@ -70,6 +73,34 @@ class ApprovalTest extends TestCase
         Approvals::verifyTransformedList($list, $callbackObject, 'toUpper');
     }
 
+    public function testCreatesFileIfDoesntExist()
+    {
+        /** @var \ApprovalTests\Namers\Namer&\PHPUnit\Framework\MockObject\MockObject */
+        $mockNamer = $this->createMock(Namer::class);
+        $mockNamer->method('getApprovedFile')
+                    ->willReturn('fileName');
+
+        $mockNamer->method('getApprovalsDirectory')
+                   ->willReturn('approvalsFolder');
+
+        $mockNamer->method('getReceivedFile')
+                   ->willReturn('txt');
+
+        /** @var \ApprovalTests\Writers\Writer&\PHPUnit\Framework\MockObject\MockObject */
+        $mockWriter = $this->createMock(Writer::class);
+        $mockWriter->method('getExtensionWithoutDot')
+                    ->willReturn('txt');
+
+        $mockWriter->method('write')
+                    ->willReturn('approvalsFolder/fileName');
+
+        $mockWriter->expects($this->once())
+                       ->method('writeEmpty')
+                       ->with('fileName', 'approvalsFolder');
+
+        Approvals::verify($mockWriter, $mockNamer);
+
+    }
 }
 
 class UpperClassHelper

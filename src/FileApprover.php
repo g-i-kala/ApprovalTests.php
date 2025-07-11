@@ -2,7 +2,9 @@
 
 namespace ApprovalTests;
 
-class FileApprover
+use ApprovalTests\FileComparatorInterface;
+
+class FileApprover implements FileComparatorInterface
 {
     public static function checkFiles(string $approvedFilename, string $receivedFilename): bool
     {
@@ -12,7 +14,7 @@ class FileApprover
         return $approvedContents === $receivedContents;
     }
 
-    private static function clean(string $contents): string
+    public static function clean(string $contents): string
     {
         return str_replace("\r\n", "\n", $contents);
     }

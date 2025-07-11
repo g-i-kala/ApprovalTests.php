@@ -12,6 +12,8 @@ use PHPUnit\Framework\Assert;
 
 class Approvals
 {
+    public static ?FileComparatorInterface $fileComparator = null;
+
     public static function verifyString($received, ?Reporter $reporter = null)
     {
         self::verifyStringWithFileExtension($received, 'txt', $reporter);
@@ -51,7 +53,7 @@ class Approvals
             $namer->getApprovalsDirectory()
         );
 
-        $matching = FileApprover::checkFiles($approvedFilename, $receivedFilename);
+        $matching = self::filesMatch($approvedFilename, $receivedFilename);
 
         if ($matching) {
             $writer->delete($receivedFilename);
@@ -125,5 +127,20 @@ class Approvals
     private static function satisfyPHPUnitRequirementForAssert()
     {
         Assert::assertTrue(true);
+    }
+
+    private static function filesMatch(string $approvedFilename, string $receivedFilename)
+    {
+        //if file comparator is null
+        if (! self::$fileComparator) {
+            self::$fileComparator = new FileApprover();
+        }
+        //ser file comparator
+        return self::$fileComparator->checkFiles($approvedFilename, $receivedFilename);
+    }
+
+    public static function setFileComparator(FileComparatorInterface $comparator)
+    {
+        return self::$fileComparator = $comparator;
     }
 }
