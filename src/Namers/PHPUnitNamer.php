@@ -1,4 +1,6 @@
-<?php namespace ApprovalTests\Namers;
+<?php
+
+namespace ApprovalTests\Namers;
 
 class StackTraceMetadata
 {
@@ -26,7 +28,8 @@ class StackTraceMetadata
      */
     public $stackTraceLine;
 
-    public function __construct(array $stackTraceLine, array $prevStackTraceLine) {
+    public function __construct(array $stackTraceLine, array $prevStackTraceLine)
+    {
         if (array_key_exists('file', $stackTraceLine)) {
             $this->isPHPUnitTest = self::isPHPUnitTest($stackTraceLine['file']);
         } else {
@@ -68,7 +71,8 @@ class StackTraceMetadata
         return substr($haystack, -$length) === $needle;
     }
 
-    public function __toString(): string {
+    public function __toString(): string
+    {
         return "[PHPUnit,class,method,reflection,testDirectory]="
             ."[{$this->isPHPUnitTest},{$this->class},{$this->function},{$this->isReflection},{$this->testDirectory}]";
     }
@@ -137,7 +141,8 @@ class PHPUnitNamer implements Namer
             array_slice(
                 explode('\\', $this->getCallingTestClassName()),
                 -1
-        ))[0];
+            )
+        )[0];
     }
 
     public function getCallingTestMethodName()

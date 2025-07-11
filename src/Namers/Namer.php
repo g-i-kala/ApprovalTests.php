@@ -1,4 +1,6 @@
-<?php namespace ApprovalTests\Namers;
+<?php
+
+namespace ApprovalTests\Namers;
 
 interface Namer
 {
@@ -8,4 +10,5 @@ interface Namer
     public function getCallingTestClassNameWithoutNamespace();
     public function getCallingTestMethodName();
     public function getCallingTestDirectory();
+    public function getApprovalsDirectory();
 }
