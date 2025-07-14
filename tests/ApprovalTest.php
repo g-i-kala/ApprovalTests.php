@@ -4,6 +4,7 @@ namespace ApprovalTests\Tests;
 
 use Exception;
 use ApprovalTests\Approvals;
+use ApprovalTests\FileComparatorInterface;
 use ApprovalTests\Namers\Namer;
 use PHPUnit\Framework\TestCase;
 use ApprovalTests\Writers\Writer;
@@ -73,7 +74,7 @@ class ApprovalTest extends TestCase
         Approvals::verifyTransformedList($list, $callbackObject, 'toUpper');
     }
 
-    public function testCreatesFileIfDoesntExist()
+    public function testCreatesEmptyApprovedFileIfItDoesntExist()
     {
         /** @var \ApprovalTests\Namers\Namer&\PHPUnit\Framework\MockObject\MockObject */
         $mockNamer = $this->createMock(Namer::class);
@@ -98,8 +99,24 @@ class ApprovalTest extends TestCase
                        ->method('writeEmpty')
                        ->with('fileName', 'approvalsFolder');
 
+        /** @var \ApprovalTests\FileComparatorInterface&\PHPUnit\Framework\MockObject\MockObject */
+        $mockFileComparator = $this->createMock(FileComparatorInterface::class);
+
+        $mockFileComparator->expects($this->once())
+                        ->method('checkFiles')
+                        ->willReturn(true);
+
+        Approvals::setFileComparator($mockFileComparator);
+
         Approvals::verify($mockWriter, $mockNamer);
 
+        $this->tearDown();
+
+    }
+
+    public function tearDown(): void
+    {
+        Approvals::setFileComparator(null);
     }
 }
 

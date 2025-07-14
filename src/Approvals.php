@@ -135,11 +135,11 @@ class Approvals
         if (! self::$fileComparator) {
             self::$fileComparator = new FileApprover();
         }
-        //ser file comparator
+        //set file comparator
         return self::$fileComparator->checkFiles($approvedFilename, $receivedFilename);
     }
 
-    public static function setFileComparator(FileComparatorInterface $comparator)
+    public static function setFileComparator(?FileComparatorInterface $comparator)
     {
         return self::$fileComparator = $comparator;
     }
