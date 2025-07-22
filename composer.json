@@ -4,7 +4,7 @@
   "type": "library",
   "homepage": "https://github.com/approvals/ApprovalTests.php",
   "require": {
-    "phpunit/phpunit": "^10.5"
+    "phpunit/phpunit": "^12.2"
   },
   "license": "Apache-2.0",
   "authors": [
